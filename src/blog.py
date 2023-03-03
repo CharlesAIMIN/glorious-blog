@@ -117,15 +117,22 @@ def update(post_id):
 
     Returns: update view or a redirect to the index page
     """
+
+    tag1 = '<'
+    tag2 = '>'
+
     post = get_post(post_id)
 
     if flask.request.method == 'POST':
         title = flask.request.form['title']
-        body = flask.request.form['body']
+        body = Markup(flask.request.form['body'])
         error = None
 
         if not title:
             error = 'Title is required.'
+
+        if body.__contains__(tag1 or tag2):
+            error = "Pas d'injection svp mdr"
 
         if error is not None:
             flask.flash(error, 'error')
@@ -137,6 +144,9 @@ def update(post_id):
             )
             db.commit()
             return flask.redirect(flask.url_for('blog.index'))
+
+        # process the form data here
+        return flask.render_template("blog/index.html", title=title, body=body, error=error)
 
     return flask.render_template('blog/update.html', post=post)
 

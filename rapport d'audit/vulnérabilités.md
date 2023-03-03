@@ -26,10 +26,11 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
  **CORRIGE**
  
  ### Injection XSS
- 
- Dans le formulaire de création des posts
- 
  ```<script>alert('XSS test')</script>```
+ Dans le formulaire de création des posts
+  **CORRIGE**
+ 
+  Dans le formulaire de mise à jour des posts
  
  ### hash
  
@@ -42,7 +43,11 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
  
  Pas d'anti brute force sur la page de connextion
  
- ### sanitization ?
+ ### sanitization 
+ 
+ Ajout regex, mdp au moins 8 caractères et escape sur les chanmps d'entrée dans login.html, register.html et auth.py
+ 
+  **CORRIGE**
  
  ### Authentification failure
  
