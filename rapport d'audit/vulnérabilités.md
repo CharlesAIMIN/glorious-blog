@@ -26,10 +26,11 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
  **CORRIGE**
  
  ### Injection XSS
- 
- Dans le formulaire de création des posts
- 
  ```<script>alert('XSS test')</script>```
+ Dans le formulaire de création des posts
+  **CORRIGE**
+ 
+  Dans le formulaire de mise à jour des posts
  
  ### hash
  
