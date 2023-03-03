@@ -23,3 +23,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### auth.py
 
 -hash of the password before its validity in the base at line 76
+
+## [1.1.1] - 2023-03-03
+
+### Security
+
+#### login.html 
+
+-Sanitazing at line 8 with a regex and at line 10
+
+#### register.html
+
+-Sanitazing at line 8 with a regex and at line 10 require at least 8 char long for a password
+
+### auth.py 
+
+-At line 31, 32, 68 and 69, added escape to input fields
+
+### Fixed
+
+#### blog.py
+
+-Fixing SQL querie at line 136

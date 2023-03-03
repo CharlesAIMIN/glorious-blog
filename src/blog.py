@@ -138,9 +138,9 @@ def update(post_id):
             flask.flash(error, 'error')
         else:
             db = get_db()
+            
             db.execute(
-                'UPDATE post SET title = ?, body = ? WHERE id = ?', (title, body, post_id)
-                # la requête est maintenant préparée
+                'UPDATE post SET title = ?, body = ? WHERE id = ?', (title, body, post_id) # la requête est maintenant préparée
             )
             db.commit()
             return flask.redirect(flask.url_for('blog.index'))

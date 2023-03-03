@@ -3,6 +3,8 @@
 """
 import functools
 
+import html
+
 import flask
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -27,8 +29,8 @@ def register():
     Returns (str): register view or redirect to login page
     """
     if flask.request.method == 'POST':
-        username = flask.request.form['username']
-        password = flask.request.form['password']
+        username = html.escape(flask.request.form['username'])
+        password = html.escape(flask.request.form['password'])
         db = get_db()
         error = None
 
@@ -63,8 +65,8 @@ def login():
     Returns (str): login view or redirect to index page
     """
     if flask.request.method == 'POST':
-        username = flask.request.form['username']
-        password = flask.request.form['password']
+        username = html.escape(flask.request.form['username'])
+        password = html.escape(flask.request.form['password'])
         db = get_db()
         error = None
         user = db.execute(
