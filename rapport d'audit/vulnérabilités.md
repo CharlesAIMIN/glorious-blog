@@ -31,7 +31,7 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
   **CORRIGE**
  
   Dans le formulaire de mise à jour des posts
- 
+   **CORRIGE**
  ### hash
  
  MDP non hashé dans la base
