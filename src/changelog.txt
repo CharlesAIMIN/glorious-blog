@@ -36,9 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -Sanitazing at line 8 with a regex and at line 10 require at least 8 char long for a password
 
-### auth.py 
+#### auth.py 
 
 -At line 31, 32, 68 and 69, added escape to input fields
+-In the function login(), added an anti-bruteforce feature that timeout the user for 5 minutes if he entered his password
+wrong 5 times
 
 ### Fixed
 
