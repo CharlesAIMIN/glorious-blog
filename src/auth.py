@@ -7,10 +7,15 @@ import html
 
 import flask
 
+from datetime import datetime, timedelta
+
+from flask import Flask, request, session
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import get_db
 from flask import session
+
 
 bp = flask.Blueprint(  # declare new blueprint
     name='auth',
@@ -61,14 +66,37 @@ def login():
     """Login view. Answer a GET request with the login form.
     Attach user id if POST request occurs and return user to index
     page if everything went right, otherwise to the login view.
-
+    
+    It checks if the user has made more than 5 login attempts in the last 5 minutes, and if so, it
+    returns an error.
+    
     Returns (str): login view or redirect to index page
     """
-    if flask.request.method == 'POST':
-        username = html.escape(flask.request.form['username'])
-        password = html.escape(flask.request.form['password'])
+    error = None
+    global login_attempts
+    
+    if request.method == 'POST':
+        username = html.escape(request.form['username'])
+        password = html.escape(request.form['password'])
+        if username not in login_attempts:
+            login_attempts[username] = {
+                'attempts': 1,
+                'last_attempt': datetime.now()
+            }
+        else:
+            last_attempt = login_attempts[username]['last_attempt']
+            if datetime.now() - last_attempt > timedelta(minutes=5):
+                login_attempts[username]['attempts'] = 1
+                login_attempts[username]['last_attempt'] = datetime.now()
+            else:
+                login_attempts[username]['attempts'] += 1
+                login_attempts[username]['last_attempt'] = datetime.now()
+
+        if login_attempts[username]['attempts'] > 5:
+            error = 'Too many attempts, try again later'
+            flask.flash(error, 'error')
+
         db = get_db()
-        error = None
         user = db.execute(
             'SELECT * FROM user WHERE username = ?', (username,)  # la requête est maintenant préparée
         ).fetchone()
@@ -84,6 +112,7 @@ def login():
             session['user_id'] = user['id']
             return flask.redirect(flask.url_for('index'))
 
+        # Sinon, on affiche un message d'erreur et on redirige vers la page de login
         flask.flash(error, 'error')
 
     return flask.render_template('auth/login.html')

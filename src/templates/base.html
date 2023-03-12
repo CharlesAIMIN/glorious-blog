@@ -13,7 +13,7 @@
     <a href="{{ url_for('index') }}"><img alt="Glorious blog" title="Glorious blog" src="{{ url_for('static', filename='media/glorious.svg') }}"></a>
     <ul>
     {% if g.user %}
-      <li><span><b>{{ g.user['username'] }}</b></span>
+      <li><a href="{{ url_for('profile.profile') }}"><b>{{ g.user['username'] }}</b></a></li>
       <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
     {% else %}
       <li><a href="{{ url_for('auth.register') }}">Register</a>
