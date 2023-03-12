@@ -139,7 +139,7 @@ def load_logged_in_user():
         flask.g.user = None
     else:
         flask.g.user = get_db().execute(
-            f'SELECT * FROM user WHERE id = ?', (user_id,)  # la requête est maintenant préparée
+            'SELECT * FROM user WHERE id = ?', (user_id,)  # la requête est maintenant préparée
         ).fetchone()
 
 
