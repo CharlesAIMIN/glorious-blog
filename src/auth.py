@@ -14,8 +14,7 @@ from flask import Flask, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from db import get_db
-
-login_attempts = {}
+from flask import session
 
 
 bp = flask.Blueprint(  # declare new blueprint
@@ -48,8 +47,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",    #la requête est maintenant préparée
-                    (username, generate_password_hash(password)),             #le mot de passe est hashé
+                    "INSERT INTO user (username, password) VALUES (?, ?)",  # la requête est maintenant préparée
+                    (username, generate_password_hash(password)),  # le mot de passe est hashé
                 )
                 db.commit()
             except db.IntegrityError:  # catch this specific exception
@@ -99,22 +98,19 @@ def login():
 
         db = get_db()
         user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)     #la requête est maintenant préparée
+            'SELECT * FROM user WHERE username = ?', (username,)  # la requête est maintenant préparée
         ).fetchone()
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):    #On hash le mdp en entrée pour le comparé à celui de la base
+        elif not check_password_hash(user['password'],
+                                     password):  # On hash le mdp en entrée pour le comparé à celui de la base
             error = 'Incorrect password.'
 
         if error is None:
-            # generate redirect response, attach authentication cookie on it
-            # and return the response object
-            response = flask.redirect(flask.url_for('index'))
-            response.set_cookie('user_id', str(user['id']))
-            # Réinitialiser le compteur de tentatives de connexion réussies
-            login_attempts[username]['attempts'] = 1
-            return response
+            session.clear()
+            session['user_id'] = user['id']
+            return flask.redirect(flask.url_for('index'))
 
         # Sinon, on affiche un message d'erreur et on redirige vers la page de login
         flask.flash(error, 'error')
@@ -133,19 +129,17 @@ def logout():
     return response
 
 
-
-
 @bp.before_app_request
 def load_logged_in_user():
     """If user is currently connected, attach user object to context.
     """
-    user_id = flask.request.cookies.get('user_id')
+    user_id = session.get('user_id')
 
     if user_id is None:
         flask.g.user = None
     else:
         flask.g.user = get_db().execute(
-            f'SELECT * FROM user WHERE id = ?', (user_id,)   #la requête est maintenant préparée
+            f'SELECT * FROM user WHERE id = ?', (user_id,)  # la requête est maintenant préparée
         ).fetchone()
 
 
@@ -153,6 +147,7 @@ def login_required(view):
     """Register a view that need authentication. Redirect client to login if
     they are not authenticated.
     """
+
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if flask.g.user is None:

@@ -3,6 +3,7 @@
 Main entry point of the blog web app.
 """
 import pathlib
+import secrets
 
 import flask  # import the flask library
 
@@ -21,9 +22,13 @@ app.jinja_env.autoescape = True  # enable autoescaping
 
 app.config['DATABASE'] = app_dir / 'db.sqlite'  # path to the db file
 app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = 'some_random_value'
-app.config['UPLOAD_FOLDER'] = '/uploads'
 
+app.config['SECRET_KEY'] = 'some_random_value'  # generates random secret key
+
+
+app.config['SESSION_TYPE'] = 'cookie'
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = 1800
 
 db.register_db_methods(app)  # register db management methods
 
@@ -32,7 +37,6 @@ app.register_blueprint(blog.bp)  # add blog views to application
 app.register_blueprint(profil.bp)  # add profile views to application
 
 app.add_url_rule('/', endpoint='index')  # map the 'index' endpoint with /
-
 
 if __name__ == '__main__':
     app.run()  # start web server

@@ -31,7 +31,7 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
   **CORRIGE**
  
   Dans le formulaire de mise à jour des posts
- 
+   **CORRIGE**
  ### hash
  
  MDP non hashé dans la base
@@ -41,7 +41,9 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
  
  ### anti bruteforce
  
- Pas d'anti brute force sur la page de connextion
+ Pas d'anti brute force sur la page de connexion
+ 
+   **CORRIGE**
  
  ### sanitization 
  
@@ -52,3 +54,9 @@ Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
  ### Authentification failure
  
  Il est possible de changer la valeure "user_id" dans le cookie pour changer de session utilisateur
+ 
+ # Axes d'amélioration 
+ 
+ ## Page de profil
+ 
+ Il peut être intéressant de rajouter une page de profil avec un avatar et la possibilité de changer son nom d'utilisateur
