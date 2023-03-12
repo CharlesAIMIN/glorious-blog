@@ -8,20 +8,16 @@ En effet, toutes les requêtes implémentées en dur ne sont pas préparés, ce 
 
 Cette vulnérabilité est présente dans le fichier auth.py, dans les fonction :
 
- - register(): 
-	A la ligne 41
-```
-    db.execute(
-    	f'INSERT INTO user (username, password) VALUES '  #TODO : préparer la requête
-    	f'("{username}", "{password}")'
-    )
-    db.commit()
-    
-   ```
+ - register()
+ - login()
+ - load_logged_in_user()
 
- - login():
- - load_logged_in_user():
- - 
+Cette vulnérabilité est présente dans le fichier blog.py, dans les fonction :
+ - login_required()
+ - get_post()
+ - login_required()
+ - index()
+ - create()
  
  **CORRIGE**
  
